@@ -105,7 +105,7 @@ function post() {
       timer: 3000,
       timerProgressBar: true
     }).then(() => {
-      window.location.href = './main.html';
+      window.location.href = './index.html';
     });
   } else {
     Swal.fire('Error!', 'Please fill out all post fields.', 'error');
