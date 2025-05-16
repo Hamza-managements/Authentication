@@ -1,14 +1,19 @@
 // ===== SIGNUP FUNCTION =====
+let userArray = []; 
+
 function signup() {
   const getEmail = document.getElementById('email').value.trim();
   const getPass = document.getElementById('password').value.trim();
+  const getFullName = document.getElementById('fullName').value.trim();
 
   if (getEmail && getPass) {
     const dataObj = {
       email: getEmail,
-      password: getPass
+      password: getPass,
+      fullname : getFullName 
     };
-    localStorage.setItem("userData", JSON.stringify(dataObj));
+    userArray.push(dataObj);
+    localStorage.setItem("userData", JSON.stringify(userArray));
     Swal.fire({
       title: 'Sign Up Successful!',
       text: 'Redirecting to login page...',
@@ -54,14 +59,17 @@ document.addEventListener('DOMContentLoaded', function () {
 function login() {
   const getEmail = document.getElementById('email').value.trim();
   const getPass = document.getElementById('password').value.trim();
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const users = JSON.parse(localStorage.getItem('userData')) || [];
 
-  if (!userData) {
-    Swal.fire('No user found!', 'Please sign up first.', 'error');
-    return;
-  }
+  // Find matching user
+  const matchedUser = users.find(
+    (user) => user.email === getEmail && user.password === getPass
+  );
 
-  if (getEmail === userData.email && getPass === userData.password) {
+  if (matchedUser) {
+    // Optionally save current login (e.g., for auth check later)
+    localStorage.setItem('currentUser', JSON.stringify(matchedUser));
+
     Swal.fire({
       title: 'Login Successful!',
       text: 'Redirecting to Home page...',
@@ -81,6 +89,7 @@ function login() {
     });
   }
 }
+
 
 // ===== POST FUNCTION =====
 function post() {
@@ -164,6 +173,11 @@ function getPost() {
         </button>
       </div>
     </div>`;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+if (currentUser) {
+  document.getElementById('currentUser').innerText = currentUser.fullname;
+}
+
 }
 
 
