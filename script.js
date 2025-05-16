@@ -1,19 +1,33 @@
-// ===== SIGNUP FUNCTION =====
-let userArray = []; 
-
 function signup() {
   const getEmail = document.getElementById('email').value.trim();
   const getPass = document.getElementById('password').value.trim();
   const getFullName = document.getElementById('fullName').value.trim();
 
-  if (getEmail && getPass) {
+  // Get existing users from localStorage or create a new array
+  const userArray = JSON.parse(localStorage.getItem('userData')) || [];
+
+  if (getEmail && getPass && getFullName) {
     const dataObj = {
       email: getEmail,
       password: getPass,
-      fullname : getFullName 
+      fullname: getFullName
     };
+
+    // Optional: Prevent duplicate emails
+    const emailExists = userArray.some(user => user.email === getEmail);
+    if (emailExists) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Email already exists. Please use a different email.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
     userArray.push(dataObj);
     localStorage.setItem("userData", JSON.stringify(userArray));
+
     Swal.fire({
       title: 'Sign Up Successful!',
       text: 'Redirecting to login page...',
@@ -33,6 +47,7 @@ function signup() {
     });
   }
 }
+
 
 // ===== TOGGLE PASSWORD VISIBILITY =====
 document.addEventListener('DOMContentLoaded', function () {
@@ -97,6 +112,8 @@ function post() {
   const getPrice = document.getElementById('price').value.trim();
   const getImgURL = document.getElementById('imgUrl').value.trim();
   const getImgContent = document.getElementById('imgContent').value.trim();
+  const posts = JSON.parse(localStorage.getItem('postData')) || [];
+ 
 
   if (getTitle && getPrice && getImgURL && getImgContent) {
     const postObj = {
@@ -105,7 +122,8 @@ function post() {
       price: getPrice,
       content: getImgContent
     };
-    localStorage.setItem("postData", JSON.stringify(postObj));
+    posts.push(postObj);
+    localStorage.setItem("postData", JSON.stringify(posts));
     Swal.fire({
       title: 'Post Created Successfully!',
       text: 'Redirecting to Home page...',
@@ -122,16 +140,17 @@ function post() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  getPost();
-});
+
 function getPost() {
   const postData = JSON.parse(localStorage.getItem("postData"));
   if (!postData) return;
-  console.log(postData);
-
-  const { title, img, price, content } = postData;
+  // console.log(postData);
+  
   const getCard = document.getElementById('product-card-container');
   getCard.innerHTML = '';
+  for (let i = 0; i < postData.length; i++) {
+    const { title, img, price, content } = postData[i];
+    console.log(postData, title, img, price, content);
   getCard.innerHTML += `
   <div class="product-card" id="product-card">
       <span class="product-badge">Sale</span>
@@ -173,11 +192,15 @@ function getPost() {
         </button>
       </div>
     </div>`;
+  }
+
+ 
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (currentUser) {
   document.getElementById('currentUser').innerText = currentUser.fullname;
 }
 
 }
-
+ getPost();
+});
 
