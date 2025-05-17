@@ -1,4 +1,5 @@
-function signup() {
+function signup(e) {
+  e.preventDefault();
   const getEmail = document.getElementById('email').value.trim();
   const getPass = document.getElementById('password').value.trim();
   const getFullName = document.getElementById('fullName').value.trim();
