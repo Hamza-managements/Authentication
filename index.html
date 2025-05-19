@@ -15,7 +15,6 @@
         
         body {
             background-color: #f5f5f5;
-            padding-top: 80px;
         }
 
         /* Classical Header Styles */
@@ -169,11 +168,7 @@
 
         #product-card-container{
             width: auto;
-            display: flex; 
-            justify-content: center;
-            align-items: center;
             min-height: 100vh;
-            padding: 20px;      
         }
         /* Product Card Container */
         .product-card {
@@ -267,7 +262,7 @@
         }
         
         .quick-btn:hover {
-            background: #3498db;
+            background: #A06D33;
             color: white;
             transform: scale(1.1);
         }
@@ -287,7 +282,7 @@
         .product-title {
             font-size: 18px;
             font-weight: 600;
-            color: #2c3e50;
+            color: #213141;
             margin-bottom: 10px;
             display: -webkit-box;
             -webkit-line-clamp: 2;  
@@ -314,7 +309,7 @@
         }
         
         .stars {
-            color: #f1c40f;
+            color: #ebbd08;
             margin-right: 5px;
         }
         
@@ -345,8 +340,8 @@
         }
         
         .discount {
-            background: #2ecc71;
-            color: white;
+            background: #D6AD60;
+            color: rgb(66, 65, 65);
             padding: 3px 8px;
             border-radius: 4px;
             font-size: 12px;
@@ -371,11 +366,20 @@
         }
         
         .add-to-cart:hover {
-            background: #2980b9;
+            background: #1b6799;
         }
         
         .add-to-cart i {
             font-size: 16px;
+        }
+
+        .editbtn{
+            background: #A06d33;
+            color: white;
+        }
+        .editbtn:hover{
+            background: #663f12;
+            color: white;
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -387,7 +391,7 @@
         <div class="header-container">
             <a href="#" class="brand">
                 <i class="fas fa-shield-halved brand-logo"></i>
-                <span class="brand-name">My Authentication</span>
+                <span class="brand-name" id="currentUser">My Authentication</span>
             </a>
             
             <button class="menu-toggle" id="menuToggle">
@@ -395,10 +399,8 @@
             </button>
 
             <nav class="nav-menu" id="navMenu">
-                <!-- <a href="#" class="nav-link">Home</a>
-                <a href="#" class="nav-link">About</a>
-                <a href="#" class="nav-link">Services</a> -->
                 <div class="auth-buttons">
+                    <a href="./admin-login.html" class="auth-button signup-btn">login as admin</a>
                     <a href="./singup.html" class="auth-button signup-btn">
                         <i class="fas fa-user-plus"></i> Sign Up
                     </a>
@@ -410,7 +412,8 @@
         </div>
     </header>
 
-    <div id="product-card-container"></div>
+    <div id="product-card-container" class="d-flex flex-wrap flex-column flex-md-row gap-3 justify-content-center align-items-center"></div>
+
 
     <script>
         // Mobile menu toggle

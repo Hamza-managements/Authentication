@@ -70,6 +70,24 @@
         padding: 1.5rem;
       }
     }
+    .login-link {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .login-link a {
+      color: #A06d33;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .login-link a:hover {
+      color:#663f12;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -97,6 +115,9 @@
           </div>
           <div class="d-grid">
             <button type="submit" onclick="post()" class="btn btn-primary">Post</button>
+            <div class="login-link">
+              <p>Dont wanna upload.<a href="./index.html">go to dashboard</a></p>     
+            </div>
           </div>
         </div>
       </div>

@@ -199,7 +199,7 @@
       <div class="col-12 col-md-8 col-lg-6">
         <div class="signup-box">
           <div class="signup-header">
-            <h2>Create Account</h2>
+            <h2>Create Account As Admin</h2>
             <p>Join us today and get access to all features</p>
           </div>
           <form id="signupForm" novalidate>
@@ -214,7 +214,17 @@
               />
               <div class="invalid-feedback">Please enter your full name</div>
             </div>
-
+            <div class="form-group">
+              <label for="fullName" class="form-label">Business category</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="businessCategory" 
+                placeholder="Enter your business category"
+                required 
+              />
+              <div class="invalid-feedback">Please enter your full name</div>
+            </div>
             <div class="form-group">
               <label for="email" class="form-label">Email Address</label>
               <input 
@@ -258,15 +268,14 @@
               </div>
             </div>
 
-            <button onclick="signup(event)" class="btn-signup">
+            <button onclick="adminsignup(event)" class="btn-signup">
               <i class="fas fa-user-plus me-2"></i>Create Account
             </button>
 
             <div class="login-link">
-              Already have an account? <a href="./login.html">Log in</a>
-              <br>
-              <p>Don't have a <strong>business account?</strong><a href="./admin-signup.html">Sign up here</a></p>
-
+                <p>Already have an account? <a href="./admin-login.html">Log in</a></p>
+                <br>
+                <p>Want to sign in as User <a href="./singup.html">Sign up</a></p>
             </div>
           </form>
         </div>

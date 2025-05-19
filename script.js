@@ -49,7 +49,59 @@ function signup(e) {
   }
 }
 
+function adminsignup(e){
+  e.preventDefault();
+  const getEmail = document.getElementById('email').value.trim();
+  const getPass = document.getElementById('password').value.trim();
+  const getFullName = document.getElementById('fullName').value.trim();
+  const getCategory = document.getElementById('businessCategory').value.trim();
 
+  // Get existing users from localStorage or create a new array
+  const userArray = JSON.parse(localStorage.getItem('userData')) || [];
+
+  if (getEmail && getPass && getFullName) {
+    const dataObj = {
+      email: getEmail,
+      password: getPass,
+      fullname: getFullName,
+      category: getCategory
+    };
+
+    // Optional: Prevent duplicate emails
+    const emailExists = userArray.some(user => user.email === getEmail);
+    if (emailExists) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'Email already exists. Please use a different email.',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+      return;
+    }
+
+    userArray.push(dataObj);
+    localStorage.setItem("userData", JSON.stringify(userArray));
+
+    Swal.fire({
+      title: 'Sign Up Successful!',
+      text: 'Redirecting to login page...',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      timer: 3000,
+      timerProgressBar: true
+    }).then(() => {
+      window.location.href = './admin-login.html';
+    });
+  } else {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Please fill out all fields.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+  }
+
+}
 // ===== TOGGLE PASSWORD VISIBILITY =====
 document.addEventListener('DOMContentLoaded', function () {
   const toggle = document.getElementById('togglePassword');
@@ -94,7 +146,7 @@ function login() {
       timer: 3000,
       timerProgressBar: true
     }).then(() => {
-      window.location.href = './posts.html';
+      window.location.href = './index.html';
     });
   } else {
     Swal.fire({
@@ -106,6 +158,39 @@ function login() {
   }
 }
 
+adminLogin = () => {
+  const getEmail = document.getElementById('email').value.trim();
+  const getPass = document.getElementById('password').value.trim();
+  const users = JSON.parse(localStorage.getItem('userData')) || [];
+
+  // Find matching user
+  const matchedUser = users.find(
+    (user) => user.email === getEmail && user.password === getPass
+  );
+
+  if (matchedUser) {
+    localStorage.setItem('currentUser', JSON.stringify(matchedUser));
+
+    Swal.fire({
+      title: 'Login Successful!',
+      text: 'Redirecting to Home page...',
+      icon: 'success',
+      confirmButtonText: 'OK',
+      timer: 3000,
+      timerProgressBar: true
+    }).then(() => {
+      window.location.href = './posts.html';
+    });
+  } else {
+    Swal.fire({
+      title: 'Error!',
+      text: 'Invalid email or password.',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
+  }
+
+}
 
 // ===== POST FUNCTION =====
 function post() {
@@ -141,17 +226,14 @@ function post() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-
 function getPost() {
   const postData = JSON.parse(localStorage.getItem("postData"));
-  if (!postData) return;
-  // console.log(postData);
-  
+  if (!postData) return;  
   const getCard = document.getElementById('product-card-container');
   getCard.innerHTML = '';
   for (let i = 0; i < postData.length; i++) {
     const { title, img, price, content } = postData[i];
-    console.log(postData, title, img, price, content);
+    // console.log(postData, title, img, price, content);
   getCard.innerHTML += `
   <div class="product-card" id="product-card">
       <span class="product-badge">Sale</span>
@@ -187,21 +269,55 @@ function getPost() {
           </div>
           <span class="discount">35% OFF</span>
         </div>
-        <button class="add-to-cart">
+        <button class="add-to-cart mb-3">
           <i class="fas fa-shopping-cart"></i>
           Add to Cart
         </button>
+        <button class="add-to-cart editbtn" data-index="${i}">Edit</button>
       </div>
     </div>`;
   }
 
- 
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  function attachEditHandlers() {
+    const editButtons = document.querySelectorAll('.editbtn');
+    editButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const index = this.getAttribute('data-index');
+        const postData = JSON.parse(localStorage.getItem("postData"));
+
+        if (!postData || !postData[index]) return;
+
+        const item = postData[index];
+
+        // Prompt user for new values
+        const newTitle = prompt("Edit Title:", item.title);
+        const newContent = prompt("Edit Content:", item.content);
+        const newPrice = prompt("Edit Price:", item.price);
+
+        if (newTitle && newContent && newPrice) {
+          postData[index].title = newTitle;
+          postData[index].content = newContent;
+          postData[index].price = newPrice;
+
+          localStorage.setItem("postData", JSON.stringify(postData));
+          alert("Product updated!");
+          getPost(); // Refresh UI
+        }
+      });
+    });
+  }
+
+const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 if (currentUser) {
   document.getElementById('currentUser').innerText = currentUser.fullname;
+  const category = currentUser.category;
+  
+  const editButtons = document.querySelectorAll('.editbtn');
+  editButtons.forEach(btn => {
+    btn.style.display = category ? "block" : "none";
+  });
 }
-
+attachEditHandlers();
 }
  getPost();
 });
-
