@@ -59,7 +59,7 @@ function adminsignup(e){
   // Get existing users from localStorage or create a new array
   const userArray = JSON.parse(localStorage.getItem('userData')) || [];
 
-  if (getEmail && getPass && getFullName) {
+  if (getEmail && getPass && getBusinessName) {
     const dataObj = {
       email: getEmail,
       password: getPass,
