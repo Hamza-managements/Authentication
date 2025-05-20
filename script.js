@@ -53,7 +53,7 @@ function adminsignup(e){
   e.preventDefault();
   const getEmail = document.getElementById('email').value.trim();
   const getPass = document.getElementById('password').value.trim();
-  const getFullName = document.getElementById('fullName').value.trim();
+  const getBusinessName = document.getElementById('fullName').value.trim();
   const getCategory = document.getElementById('businessCategory').value.trim();
 
   // Get existing users from localStorage or create a new array
@@ -63,7 +63,7 @@ function adminsignup(e){
     const dataObj = {
       email: getEmail,
       password: getPass,
-      fullname: getFullName,
+      fullname: getBusinessName,
       category: getCategory
     };
 
@@ -320,4 +320,77 @@ if (currentUser) {
 attachEditHandlers();
 }
  getPost();
+// ===== SEARCH FUNCTION =====
+  const searchInput = document.getElementById('searchInput');
+  const noResultsDiv = document.getElementById('noResults');
+  const productCards = document.querySelectorAll('.product-card');
+
+  let debounceTimer;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      productCards.forEach(card => {
+        const titleEl = card.querySelector('.product-title');
+        const originalTitle = titleEl.innerText;
+        const lowerTitle = originalTitle.toLowerCase();
+
+        if (searchTerm && lowerTitle.includes(searchTerm)) {
+          // Show card
+          card.style.display = 'block';
+          visibleCount++;
+
+          // Highlight the matched text
+          const regex = new RegExp(`(${searchTerm})`, 'gi'); // case-insensitive
+          const highlighted = originalTitle.replace(regex, '<span class="highlight">$1</span>');
+          titleEl.innerHTML = highlighted;
+
+
+        } else if (!searchTerm) {
+          // Empty input: show all cards and restore original title
+          card.style.display = 'block';
+          titleEl.innerText = originalTitle;
+
+        } else {
+          // No match: hide card
+          card.style.display = 'none';
+          titleEl.innerText = originalTitle; // reset just in case
+        }
+      });
+
+      noResultsDiv.style.display = (visibleCount === 0 && searchTerm) ? 'block' : 'none';
+    }, 200);
+  });
+
 });
+
+// ===== LOGOUT FUNCTION =====  
+function logout() {
+  localStorage.removeItem('currentUser');
+
+  let redirected = false;
+
+  Swal.fire({
+    title: 'Logout Successful!',
+    text: 'Redirecting to login page...',
+    icon: 'success',
+    confirmButtonText: 'OK',
+    timer: 3000,
+    timerProgressBar: true
+  }).then(() => {
+    if (!redirected) {
+      redirected = true;
+      window.location.href = './login.html';
+    }
+  });
+
+  // Fallback in case alert doesn't resolve (edge cases)
+  setTimeout(() => {
+    if (!redirected) {
+      redirected = true;
+      window.location.href = './login.html';
+    }
+  }, 3100);
+}
