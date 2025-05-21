@@ -55,7 +55,6 @@ function adminsignup(e){
   const getPass = document.getElementById('password').value.trim();
   const getBusinessName = document.getElementById('fullName').value.trim();
   const getCategory = document.getElementById('businessCategory').value.trim();
-
   // Get existing users from localStorage or create a new array
   const userArray = JSON.parse(localStorage.getItem('userData')) || [];
 
@@ -269,7 +268,7 @@ function getPost() {
           </div>
           <span class="discount">35% OFF</span>
         </div>
-        <button class="add-to-cart mb-3">
+        <button class="add-to-cart mb-3" onclick="addToCart(${i})">
           <i class="fas fa-shopping-cart"></i>
           Add to Cart
         </button>
@@ -364,9 +363,40 @@ attachEditHandlers();
     }, 200);
   });
 
+  // ===== LOGOUT FUNCTION =====  
+  
+  
 });
 
-// ===== LOGOUT FUNCTION =====  
+function addToCart(index) {
+  const cartElement = document.getElementById('cartNo');
+  const currentCount = parseInt(cartElement.innerText) || 0;
+  cartElement.innerText = currentCount + 1;
+
+  const postData = JSON.parse(localStorage.getItem("postData"));
+  if (!postData || !postData[index]) return;
+  const item = postData[index];
+
+  let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+  const existingIndex = cartItems.findIndex(cartItem => cartItem.title === item.title);
+  if (existingIndex !== -1) {
+    // If item exists, increase quantity
+    cartItems[existingIndex].quantity += 1;
+  } else {
+    // Add new item with quantity 1
+    cartItems.push({
+      title: item.title,
+      img: item.img,
+      price: item.price,
+      content: item.content,
+      quantity: 1
+    });
+  }
+
+  localStorage.setItem('cartItems', JSON.stringify(cartItems));
+}
+
 function logout() {
   localStorage.removeItem('currentUser');
 
